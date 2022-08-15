@@ -14,9 +14,7 @@ CREATE TABLE users (
   password_hash VARCHAR NOT NULL 
 );
 
--- INSERT INTO users (user_name, email, ) VALUES
---   ('test_1', 'abc@123'),
---   ('test_2', '123@abc');
+
 
 CREATE TABLE restaurants (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
