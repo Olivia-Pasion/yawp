@@ -21,8 +21,7 @@ const registerAndLogin = async (userProps = {}) => {
   const [, user] = await UserService.signUp({ ...testUser[0], ...userProps });
 
   const { email } = user;
-  const res = await agent.post('/api/v1/users/sessions').send({ email, password });
-  console.log('resgister and login', res.body);
+  await agent.post('/api/v1/users/sessions').send({ email, password });
   console.log({ user });
   return [agent, user];
 };
@@ -57,16 +56,13 @@ describe('users routes', () => {
     expect(res.status).toBe(200);
   });
   it('#GET /api/v1/users should show admins a list of users', async () => {
-    const adminUser = await registerAndLogin({
-      email: 'admin@admin',
+    const [agent] = await registerAndLogin({
+      email: 'admin',
       password: 'adminboss'
     });
-    
-    const agent = request.agent(app);
-
-    const res = await request(app).get('/api/v1/users');
-    console.log(res.body);
-    //expect(res.body.length).toEqual(2);
+  
+    const res = await agent.get('/api/v1/users');
+    expect(res.body.length).toEqual(2);
     expect(res.body[0]).toEqual({
       id: expect.any(String),
       userName: expect.any(String)
