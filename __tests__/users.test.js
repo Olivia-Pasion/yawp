@@ -3,7 +3,7 @@ const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
 
-describe('backend-express-template routes', () => {
+describe('users routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
@@ -14,8 +14,23 @@ describe('backend-express-template routes', () => {
   it('#POST /pi/v1/users/sessions should login an existing user', async () => {
     await request(app).post('/api/v1/users').send({ userName: 'test_2', email: '123@abc', password: '123abc' });
     const res = await request(app).post('/api/v1/users/sessions').send({ userName: 'test_2', email: '123@abc', password: '123abc' });
-    console.log('BODY', res.body);
     expect(res.status).toBe(200);
+  });
+  it('#GET /api/v1/users should show list of users for admins', async () => {
+    const adminUser = {
+      email: 'admin@admin',
+      password: 'adminboss'
+    };
+    
+    const agent = request.agent(app);
+
+    const res = await request(app).get('/api/v1/users');
+    console.log(res.body);
+    //expect(res.body.length).toEqual(2);
+    expect(res.body[0]).toEqual({
+      id: expect.any(String),
+      userName: expect.any(String)
+    });
   });
   afterAll(async () => {
     await setup(pool);
