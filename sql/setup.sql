@@ -14,8 +14,8 @@ CREATE TABLE users (
   password_hash VARCHAR NOT NULL 
 );
 
--- INSERT INTO users (user_name, email, password_hash ) VALUES
---   ('test_2', '123@abc', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1c2VyTmFtZSI6InRlc3RfMiIsImVtYWlsIjoiMTIzQGFiYyIsImlhdCI6MTY2MDYwNzc4NywiZXhwIjoxNjYwNjk0MTg3fQ.3bm0EAsVhS82LEk1hsTLH_iHXqZMQFYrNoM1unvtCbQ');
+INSERT INTO users (user_name, email, password_hash ) VALUES
+  ('test2', '123@abc', '$2b$10$Xg7k1p4xqI/LTEQxltkTG.XlF8lQCTlxls1mLImlpscebr3p8rBpi');
 
 CREATE TABLE restaurants (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
