@@ -17,6 +17,16 @@ describe('backend-express-template routes', () => {
       name: expect.any(String),
     });
   });
+  it('#GET /restaurants/:restId shows restaurant detail', async () => {
+    const res = await request(app).get('/api/v1/restaurants/1');
+    console.log(res.body);
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      name: expect.any(String),
+      cuisine: expect.any(String),
+      reviews: expect.any(Array)
+    });
+  });
   afterAll(() => {
     pool.end();
   });
