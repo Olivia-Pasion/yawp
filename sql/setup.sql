@@ -1,11 +1,10 @@
 -- Use this file to define your SQL tables
 -- The SQL in this file will be executed when you run `npm run setup-db`
 
-
 DROP TABLE IF EXISTS restaurants_reviews;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS restaurants;
 DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS restaurants;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -31,7 +30,9 @@ INSERT INTO restaurants (name, cuisine) VALUES
 CREATE TABLE reviews (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   stars SMALLINT CONSTRAINT star_rating CHECK (stars >= 0 AND stars <= 5) NOT NULL,
-  detail TEXT NOT NULL
+  detail TEXT NOT NULL,
+  user_id BIGINT,
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 INSERT INTO reviews (stars, detail) VALUES
@@ -53,8 +54,5 @@ INSERT INTO restaurants_reviews (restaurant_id, review_id) VALUES
   (1, 2),
   (2, 3),
   (3, 4);
-
-
-
 
 
