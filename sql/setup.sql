@@ -36,11 +36,11 @@ CREATE TABLE reviews (
   FOREIGN KEY (restaurant_id) REFERENCES restaurants(id)
 );
 
-INSERT INTO reviews (stars, detail) VALUES
-  (5, 'this food is delicious!'),
-  (5, 'would love to come back!'),
-  (3, 'just ok'),
-  (0, 'awful');
+INSERT INTO reviews (stars, detail, user_id, restaurant_id) VALUES
+  (5, 'this food is delicious!', 1, 1),
+  (5, 'would love to come back!', 1, 1),
+  (3, 'just ok', 1, 2),
+  (0, 'awful', 1, 2);
 
 
 
