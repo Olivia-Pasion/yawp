@@ -22,7 +22,6 @@ const registerAndLogin = async (userProps = {}) => {
 
   const { email } = user;
   await agent.post('/api/v1/users/sessions').send({ email, password });
-  console.log({ user });
   return [agent, user];
 };
 
@@ -32,30 +31,30 @@ describe('users routes', () => {
     return setup(pool);
   });
 
-  it.skip('#POST /api/v1/users should create new user and login', async () => {
+  it('#POST /api/v1/users should create new user and login', async () => {
     const [agent] = await registerAndLogin();
     const res = await agent.post('/api/v1/users').send(testUser[0]);
     expect(res.status).toEqual(200);
   });
 
 
-  it.skip('/protected should return a 401 if not authenticated', async () => {
+  it('/protected should return a 401 if not authenticated', async () => {
     const res = await request(app).get('/api/v1/users/protected');
     expect(res.status).toEqual(401);
   });
 
-  it.skip('/protected should return the current user if authenticated', async () => {
+  it('/protected should return the current user if authenticated', async () => {
     const [agent] = await registerAndLogin({ email: 'admin' });
     const res = await agent.get('/api/v1/users/protected');
     expect(res.status).toEqual(200);
   });
 
-  it.skip('#POST /api/v1/users/sessions should login an existing user', async () => {
+  it('#POST /api/v1/users/sessions should login an existing user', async () => {
     await request(app).post('/api/v1/users').send(testUser[1]);
     const res = await request(app).post('/api/v1/users/sessions').send({ email: '123@abc', password: '123abc' });
     expect(res.status).toBe(200);
   });
-  it.skip('#GET /api/v1/users should show admins a list of users', async () => {
+  it('#GET /api/v1/users should show admins a list of users', async () => {
     const [agent] = await registerAndLogin({
       email: 'admin',
       password: 'adminboss'

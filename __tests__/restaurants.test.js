@@ -2,29 +2,8 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
-const UserService = require('../lib/services/UserService');
 
-const testUser = [{
-  userName: 'test',
-  email: 'abc@123',
-  password: 'abc123',
-}, {
-  userName: 'test2',
-  email: '123@abc',
-  password: '123abc',
-}];
 
-const registerAndLogin = async (userProps = {}) => {
-  const password = userProps.password ?? testUser[0].password;
-
-  const agent = request.agent(app);
-  const [, user] = await UserService.signUp({ ...testUser[0], ...userProps });
-
-  const { email } = user;
-  await agent.post('/api/v1/users/sessions').send({ email, password });
-  console.log({ user });
-  return [agent, user];
-};
 
 describe('restaurant routes', () => {
   beforeEach(() => {
@@ -68,10 +47,26 @@ describe('restaurant routes', () => {
       detail: expect.any(String)
     });
   });
-  it('#DELETE /api/v1/reviews/:id original post user or admin can delete post', async () => {
-    const [agent] = await registerAndLogin();
+  it('#DELETE /api/v1/reviews/:id original post user and/or admin can delete post', async () => {
+    const agent = request.agent(app);
+
+    await agent.post('/api/v1/users/sessions').send({
+      email: '123@abc',
+      password: '123abc'
+    });
+
+    await agent
+      .post('/api/v1/restaurants/1/reviews')
+      .send({
+        stars: 5,
+        detail: 'It was okay'
+      });
+
     const resp = await agent.delete('/api/v1/reviews/2');
-    expect(resp.status).toBe(204);
+    expect(resp.status).toBe(200);
+
+    const reviewResp = await agent.get('/api/v1/reviews/2');
+    expect(reviewResp.status).toBe(404);
   });
   afterAll(() => {
     pool.end();
