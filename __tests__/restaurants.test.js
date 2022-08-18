@@ -68,7 +68,8 @@ describe('restaurant routes', () => {
     const reviewResp = await agent.get('/api/v1/reviews/2');
     expect(reviewResp.status).toBe(404);
   });
-  afterAll(() => {
+  afterAll(async () => {
+    await setup(pool);
     pool.end();
   });
 });
