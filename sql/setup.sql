@@ -18,7 +18,7 @@ INSERT INTO users (user_name, email, password_hash ) VALUES
 CREATE TABLE restaurants (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   name TEXT NOT NULL,
-  cuisine TEXT NOT NULL 
+  cuisine TEXT NOT NULL
 );
 
 INSERT INTO restaurants (name, cuisine) VALUES
@@ -31,7 +31,9 @@ CREATE TABLE reviews (
   stars SMALLINT CONSTRAINT star_rating CHECK (stars >= 0 AND stars <= 5) NOT NULL,
   detail TEXT NOT NULL,
   user_id BIGINT,
-  FOREIGN KEY (user_id) REFERENCES users(id)
+  restaurant_id BIGINT,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (restaurant_id) REFERENCES restaurants(id)
 );
 
 INSERT INTO reviews (stars, detail) VALUES

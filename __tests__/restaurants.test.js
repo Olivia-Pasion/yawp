@@ -2,9 +2,31 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
+const UserService = require('../lib/services/UserService');
 
+const testUser = [{
+  userName: 'test',
+  email: 'abc@123',
+  password: 'abc123',
+}, {
+  userName: 'test2',
+  email: '123@abc',
+  password: '123abc',
+}];
 
-describe('backend-express-template routes', () => {
+const registerAndLogin = async (userProps = {}) => {
+  const password = userProps.password ?? testUser[0].password;
+
+  const agent = request.agent(app);
+  const [, user] = await UserService.signUp({ ...testUser[0], ...userProps });
+
+  const { email } = user;
+  await agent.post('/api/v1/users/sessions').send({ email, password });
+  console.log({ user });
+  return [agent, user];
+};
+
+describe('restaurant routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
@@ -40,12 +62,16 @@ describe('backend-express-template routes', () => {
         detail: 'It was okay'
       });
 
-    console.log(res.body);
     expect(res.body).toEqual({
       id: expect.any(String),
       stars: expect.any(Number),
       detail: expect.any(String)
     });
+  });
+  it('#DELETE /api/v1/reviews/:id original post user or admin can delete post', async () => {
+    const [agent] = await registerAndLogin();
+    const resp = await agent.delete('/api/v1/reviews/2');
+    expect(resp.status).toBe(204);
   });
   afterAll(() => {
     pool.end();
