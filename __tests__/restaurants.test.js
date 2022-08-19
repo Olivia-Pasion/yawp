@@ -44,7 +44,9 @@ describe('restaurant routes', () => {
     expect(res.body).toEqual({
       id: expect.any(String),
       stars: expect.any(Number),
-      detail: expect.any(String)
+      detail: expect.any(String),
+      user_id: expect.any(String),
+      restaurant_id: expect.any(String),
     });
   });
   it('#DELETE /api/v1/reviews/:id original post user and/or admin can delete post', async () => {
